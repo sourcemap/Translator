@@ -1,12 +1,12 @@
+html, body {
+    font-family: 'Roboto', sans-serif;
+}
+
 #dropzone {
     padding: 24px;
     border-style: dashed;
     font-size: 36pt;
     width: 50%;
-}
-
-#save-btn {
-    display: none;
 }
 
 #download-btn {

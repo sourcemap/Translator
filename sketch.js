@@ -15,12 +15,11 @@ function setup() {
 }
 
 function gotFile(file) {
-  createP("File Name: " + file.name + "; File Size: " + file.size);
+  createP("File: " + file.name + " is uploaded successfully. File Size: " + file.size);
   removeExistingContent();
 
   if (file.subtype === 'json') {
     jsonData = loadJSON(file.data, gotJSONData);
-    document.getElementById('save-btn').style.display = 'block';
     document.getElementById('download-btn').style.display = 'block';
   }
   else createP("File is not JSON, please upload a json file");
@@ -56,7 +55,7 @@ function traverseJSON(o, func) {
 // called with every property and its value
 function process(key, value, last) {
   if (typeof(value) !== "object") {
-    createTextInput(fullKey + '.' + key);
+    createTextInput(fullKey + '.' + key, value);
     if (last) deleteLastKey();
   } else {
     fullKey += '.' + key;
@@ -68,21 +67,40 @@ function deleteLastKey() {
   fullKey = fullKey.slice(0, lastDotIndex);
 }
 
-function createTextInput(key) {
+function createTextInput(key, value) {
   pTexts.push(key);
 
   var p = createP(key);
   p.addClass('translate-p');
   pElements.push(p);
 
-  var input = createInput('');
+  var input = createInput(value);
   input.addClass('translate-input');
+  var currentInputIndex = inputs.length;
+  input.index = currentInputIndex;
   inputs.push(input);
   input.input(inputEvent); // input callback function
 }
 
 function inputEvent() {
+  console.log(pTexts[this.index]);
   console.log(this.value());
+  findnUpdateJSONkey(jsonData, pTexts[this.index], this.value());
+
+}
+
+// use the pText e.g. '.ADMIN.BAR.Create New' to find the object in the jsonData object and update it
+function findnUpdateJSONkey(object, path, value) {
+  path = path.substring(1); // delete the first dot
+
+  var stack = path.split('.');
+
+  while(stack.length > 1){
+    object = object[stack.shift()];
+  }
+
+  object[stack.shift()] = value;
+  console.log('jsonData UPDATED: ', jsonData);
 }
 
 function removeExistingContent() {
