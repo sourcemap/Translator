@@ -4,3 +4,11 @@
     font-size: 36pt;
     width: 50%;
 }
+
+#save-btn {
+    display: none;
+}
+
+#download-btn {
+    display: none;
+}

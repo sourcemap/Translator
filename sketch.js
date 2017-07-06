@@ -1,6 +1,9 @@
 var dropzone;
 var jsonData;
 var fullKey = '';
+var pElements = [];
+var pTexts = [];
+var inputs = [];
 
 function setup() {
   noCanvas();
@@ -13,12 +16,17 @@ function setup() {
 
 function gotFile(file) {
   createP("File Name: " + file.name + "; File Size: " + file.size);
-  console.log(file.data);
-  jsonData = loadJSON(file.data, gotJSONData);
+  removeExistingPInput();
+
+  if (file.subtype === 'json') {
+    jsonData = loadJSON(file.data, gotJSONData);
+    document.getElementById('save-btn').style.display = 'block';
+    document.getElementById('download-btn').style.display = 'block';
+  }
+  else createP("File is not JSON, please upload a json file");
 }
 
 function gotJSONData(data) {
-  console.log(data);
   traverseJSON(data, process);
 }
 
@@ -47,7 +55,6 @@ function traverseJSON(o, func) {
 
 // called with every property and its value
 function process(key, value, last) {
-  console.log(key + " : " + value);
   if (typeof(value) !== "object") {
     createTextInput(fullKey + '.' + key);
     if (last) deleteLastKey();
@@ -57,14 +64,38 @@ function process(key, value, last) {
 }
 
 function deleteLastKey() {
-  // debugger
   let lastDotIndex = fullKey.lastIndexOf('.');
   fullKey = fullKey.slice(0, lastDotIndex);
 }
 
 function createTextInput(key) {
-  createP(key);
-  createInput('');
+  pTexts.push(key);
+
+  var p = createP(key);
+  p.addClass('translate-p');
+  pElements.push(p);
+
+  var input = createInput('');
+  input.addClass('translate-input');
+  inputs.push(input);
+  input.input(inputEvent); // input callback function
+}
+
+function inputEvent() {
+  console.log(this.value());
+}
+
+function removeExistingPInput() {
+  var oldPs = document.getElementsByClassName('translate-p');
+  var oldInputs = document.getElementsByClassName('translate-input');
+
+  while (oldPs[0]) {
+    oldPs[0].parentNode.removeChild(oldPs[0]);
+  }
+
+  while (oldInputs[0]) {
+    oldInputs[0].parentNode.removeChild(oldInputs[0]);
+  }
 }
 
 function highlight() {
