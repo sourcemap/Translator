@@ -106,6 +106,14 @@ function findnUpdateJSONkey(object, path, value) {
   console.log('jsonData UPDATED: ', jsonData);
 }
 
+function downloadJSON() {
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonData));
+  var dlAnchorElem = document.getElementById('downloadAnchorElem');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", "new-lang.json");
+  dlAnchorElem.click();
+}
+
 function removeExistingContent() {
   var oldPs = document.getElementsByClassName('translate-p');
   var oldInputs = document.getElementsByClassName('translate-input');
