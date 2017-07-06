@@ -16,7 +16,7 @@ function setup() {
 
 function gotFile(file) {
   createP("File Name: " + file.name + "; File Size: " + file.size);
-  removeExistingPInput();
+  removeExistingContent();
 
   if (file.subtype === 'json') {
     jsonData = loadJSON(file.data, gotJSONData);
@@ -85,7 +85,7 @@ function inputEvent() {
   console.log(this.value());
 }
 
-function removeExistingPInput() {
+function removeExistingContent() {
   var oldPs = document.getElementsByClassName('translate-p');
   var oldInputs = document.getElementsByClassName('translate-input');
 
@@ -96,6 +96,11 @@ function removeExistingPInput() {
   while (oldInputs[0]) {
     oldInputs[0].parentNode.removeChild(oldInputs[0]);
   }
+
+  fullKey = '';
+  pElements = [];
+  pTexts = [];
+  inputs = [];
 }
 
 function highlight() {
