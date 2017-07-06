@@ -1,9 +1,12 @@
 var dropzone;
 var jsonData;
 var fullKey = '';
-var pElements = [];
+
 var pTexts = [];
 var inputs = [];
+var divs = []; // divs holds all the parent keys
+var spans = []; // spans holds all the last children keys
+var divsWithSpans = [];
 
 function setup() {
   noCanvas();
@@ -58,9 +61,26 @@ function traverseJSON(o, firstTier, func) {
 // called with every property and its value
 function process(key, value, last) {
   if (typeof(value) !== "object") {
-    createTextInput(fullKey + '.' + key, value);
+    var div = createDiv('');
+    div.addClass('translate-div');
+    var marginValue = (fullKey.split('.').length - 1) * 50;
+    div.style('margin-left', marginValue + 'px');
+    divsWithSpans.push(div);
+
+    var span = createSpan(key);
+    spans.push(span);
+    span.parent(div);
+
+    createTextInput(fullKey + '.' + key, value, div);
+
     if (last) deleteLastKey();
   } else {
+    var div = createDiv(key);
+    div.addClass('translate-div');
+    var marginValue = (fullKey.split('.').length - 1) * 50;
+    div.style('margin-left', marginValue + 'px');
+    divs.push(div);
+
     fullKey += '.' + key;
   }
 }
@@ -70,12 +90,8 @@ function deleteLastKey() {
   fullKey = fullKey.slice(0, lastDotIndex);
 }
 
-function createTextInput(key, value) {
+function createTextInput(key, value, div) {
   pTexts.push(key);
-
-  var p = createP(key);
-  p.addClass('translate-p');
-  pElements.push(p);
 
   var input = createInput(value);
   input.addClass('translate-input');
@@ -83,13 +99,13 @@ function createTextInput(key, value) {
   input.index = currentInputIndex;
   inputs.push(input);
   input.input(inputEvent); // input callback function
+  input.parent(div);
 }
 
 function inputEvent() {
   console.log(pTexts[this.index]);
   console.log(this.value());
   findnUpdateJSONkey(jsonData, pTexts[this.index], this.value());
-
 }
 
 // use the pText e.g. '.ADMIN.BAR.Create New' to find the object in the jsonData object and update it
@@ -115,11 +131,11 @@ function downloadJSON() {
 }
 
 function removeExistingContent() {
-  var oldPs = document.getElementsByClassName('translate-p');
+  var oldDivs = document.getElementsByClassName('translate-div');
   var oldInputs = document.getElementsByClassName('translate-input');
 
-  while (oldPs[0]) {
-    oldPs[0].parentNode.removeChild(oldPs[0]);
+  while (oldDivs[0]) {
+    oldDivs[0].parentNode.removeChild(oldDivs[0]);
   }
 
   while (oldInputs[0]) {
@@ -127,9 +143,11 @@ function removeExistingContent() {
   }
 
   fullKey = '';
-  pElements = [];
   pTexts = [];
   inputs = [];
+  divs = [];
+  divsWithSpans = [];
+  spans = [];
 }
 
 function highlight() {

@@ -1,5 +1,6 @@
 html, body {
     font-family: 'Roboto', sans-serif;
+    padding: 0 20px;
 }
 
 #dropzone {
@@ -11,4 +12,24 @@ html, body {
 
 #download-btn {
     display: none;
+    font-size: 16px;
+    background: white;
+    border-color: black;
+    cursor: pointer;
+}
+
+#download-btn:hover {
+	color: white;
+	background: #333;
+}
+
+.translate-div {
+	margin: 10px 0;
+}
+
+.translate-input {
+	margin-left: 10px;
+	line-height: 2;
+	width: 300px;
+	font-size: 14px;
 }
