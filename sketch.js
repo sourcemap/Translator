@@ -26,10 +26,10 @@ function gotFile(file) {
 }
 
 function gotJSONData(data) {
-  traverseJSON(data, process);
+  traverseJSON(data, true, process);
 }
 
-function traverseJSON(o, func) {
+function traverseJSON(o, firstTier, func) {
   var oLength = Object.keys(o).length;
   var index = 0;
 
@@ -39,16 +39,19 @@ function traverseJSON(o, func) {
     if (index === oLength - 1) last = true;
     else last = false;
 
-    func.apply(this, [i, o[i], last]);
+    func.apply(this, [i, o[i], last, firstTier]);
 
     if (o[i] !== null) {
       if (typeof(o[i]) == "object") {
         // going one step down in the object tree
-        traverseJSON(o[i], func);
+        traverseJSON(o[i], false, func);
       }
     }
 
     index++;
+
+    // if it's the first-tier keys of the jsonData, afte down with it, delete the key
+    if (firstTier) deleteLastKey();
   }
 }
 
