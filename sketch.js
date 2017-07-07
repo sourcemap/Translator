@@ -34,10 +34,10 @@ function gotFile(file) {
 }
 
 function gotJSONData(data) {
-  traverseJSON(data, true, process);
+  traverseJSON(data, true, null, process);
 }
 
-function traverseJSON(o, firstTier, func) {
+function traverseJSON(o, firstTier, parentId, func) {
   var oLength = Object.keys(o).length;
   var index = 0;
 
@@ -47,12 +47,13 @@ function traverseJSON(o, firstTier, func) {
     if (index === oLength - 1) last = true;
     else last = false;
 
-    func.apply(this, [i, o[i], last, firstTier]);
+    func.apply(this, [i, o[i], last, parentId]);
 
     if (o[i] !== null) {
       if (typeof(o[i]) == "object") {
         // going one step down in the object tree
-        traverseJSON(o[i], false, func);
+        // not the firstTier, and pass in the parent's id
+        traverseJSON(o[i], false, i, func);
       }
     }
 
@@ -64,7 +65,7 @@ function traverseJSON(o, firstTier, func) {
 }
 
 // called with every property and its value
-function process(key, value, last) {
+function process(key, value, last, parentId) {
   // if it's the end of a node, create a div with a span and input
   if (typeof(value) !== "object") {
     var div = createDiv('');
@@ -86,19 +87,28 @@ function process(key, value, last) {
     div.addClass('translate-div');
     var marginValue = (fullKey.split('.').length - 1) * 50;
     div.style('margin-left', marginValue + 'px');
+    div.id(key);
+    // div.addClass('collapse');
     divs.push(div);
 
-    // add a view button that can expand the sub section
-    var btn = createButton('View');
+    // add a view button that can toggle the sub section
+    var btn = createButton(key);
     btn.addClass('view-btn');
-    btn.attribute('data-toggle', 'collapse');
-    btn.attribute('data-target', '#collapse-' + key);
-    btn.attribute('aria-expanded', 'false');
-    btn.attribute('aria-controls', 'collapse-' + key);
+    btn.mouseClicked(toggleDivs);
     btn.parent(div);
 
     fullKey += '.' + key;
   }
+
+  if (parentId) {
+    div.parent(select('#' + parentId));
+  }
+}
+
+function toggleDivs() {
+  let key = this.html();
+  let selectString = '#' + key + ' .translate-div';
+  $(selectString).toggle();
 }
 
 function deleteLastKey() {
