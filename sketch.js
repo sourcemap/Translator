@@ -23,14 +23,14 @@ function setup() {
 }
 
 function gotFile(file) {
-  createP("File: " + file.name + " is uploaded successfully. File Size: " + file.size);
+  createP("File: " + file.name + " is uploaded successfully. File Size: " + file.size + '.');
   removeExistingContent();
 
   if (file.subtype === 'json') {
     jsonData = loadJSON(file.data, gotJSONData);
     document.getElementById('dropAndButton').style.visibility = 'visible';
   }
-  else createP("File is not JSON, please upload a json file");
+  else createP("File is not JSON, please upload a json file.");
 }
 
 function gotJSONData(data) {
@@ -65,6 +65,7 @@ function traverseJSON(o, firstTier, func) {
 
 // called with every property and its value
 function process(key, value, last) {
+  // if it's the end of a node, create a div with a span and input
   if (typeof(value) !== "object") {
     var div = createDiv('');
     div.addClass('translate-div');
@@ -79,12 +80,22 @@ function process(key, value, last) {
     createTextInput(fullKey + '.' + key, value, div);
 
     if (last) deleteLastKey();
-  } else {
+
+  } else { // if it's not the end of a node, create a div, and a expand button
     var div = createDiv(key);
     div.addClass('translate-div');
     var marginValue = (fullKey.split('.').length - 1) * 50;
     div.style('margin-left', marginValue + 'px');
     divs.push(div);
+
+    // add a view button that can expand the sub section
+    var btn = createButton('View');
+    btn.addClass('view-btn');
+    btn.attribute('data-toggle', 'collapse');
+    btn.attribute('data-target', '#collapse-' + key);
+    btn.attribute('aria-expanded', 'false');
+    btn.attribute('aria-controls', 'collapse-' + key);
+    btn.parent(div);
 
     fullKey += '.' + key;
   }
