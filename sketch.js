@@ -1,12 +1,15 @@
 var dropzone;
 var jsonData;
 var fullKey = '';
+var selectedLang = 'en';
 
 var pTexts = [];
 var inputs = [];
 var divs = []; // divs holds all the parent keys
 var spans = []; // spans holds all the last children keys
 var divsWithSpans = [];
+
+var languages;
 
 function setup() {
   noCanvas();
@@ -15,6 +18,8 @@ function setup() {
   dropzone.dragOver(highlight);
   dropzone.dragLeave(unhighlight);
   dropzone.drop(gotFile, unhighlight);
+
+  languages = loadJSON('short-langs.json', createDropdownItems);
 }
 
 function gotFile(file) {
@@ -23,7 +28,7 @@ function gotFile(file) {
 
   if (file.subtype === 'json') {
     jsonData = loadJSON(file.data, gotJSONData);
-    document.getElementById('download-btn').style.display = 'block';
+    document.getElementById('dropAndButton').style.visibility = 'visible';
   }
   else createP("File is not JSON, please upload a json file");
 }
@@ -103,8 +108,6 @@ function createTextInput(key, value, div) {
 }
 
 function inputEvent() {
-  console.log(pTexts[this.index]);
-  console.log(this.value());
   findnUpdateJSONkey(jsonData, pTexts[this.index], this.value());
 }
 
@@ -119,14 +122,13 @@ function findnUpdateJSONkey(object, path, value) {
   }
 
   object[stack.shift()] = value;
-  console.log('jsonData UPDATED: ', jsonData);
 }
 
 function downloadJSON() {
   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonData));
   var dlAnchorElem = document.getElementById('downloadAnchorElem');
   dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", "new-lang.json");
+  dlAnchorElem.setAttribute("download", selectedLang + ".json");
   dlAnchorElem.click();
 }
 
@@ -150,8 +152,30 @@ function removeExistingContent() {
   spans = [];
 }
 
+function createDropdownItems() {
+  var dropdown = select('#langMenu');
+
+  for (let i = 0; i < Object.keys(languages).length; i++) {
+    let dropdownItem = createA('#', languages[i].name + ', ' + languages[i].nativeName);
+    dropdownItem.addClass('dropdown-item');
+    dropdownItem.id(languages[i].code);
+    dropdownItem.parent(dropdown);
+  }
+
+  callbackForDropdown();
+}
+
+function callbackForDropdown() {
+  $("#langMenu a").click(function(e){
+    e.preventDefault(); // cancel the link behaviour
+    var selText = $(this).text();
+    $("#dropdownMenuButton").text(selText);
+    selectedLang = $(this)[0].id;
+  });
+}
+
 function highlight() {
-  dropzone.style('background-color','#ccc');
+  dropzone.style('background-color','#e6e6e6');
 }
 
 function unhighlight() {
