@@ -51,9 +51,11 @@ function traverseJSON(o, firstTier, parentId, func) {
 
     if (o[i] !== null) {
       if (typeof(o[i]) == "object") {
+        // if (last && !firstTier) deleteLastKey();
         // going one step down in the object tree
         // not the firstTier, and pass in the parent's id
-        traverseJSON(o[i], false, i, func);
+        let idFromFullKey = fullKey.split('.').join('');
+        traverseJSON(o[i], false, idFromFullKey, func);
       }
     }
 
@@ -87,12 +89,15 @@ function process(key, value, last, parentId) {
     div.addClass('translate-div');
     var marginValue = (fullKey.split('.').length - 1) * 50;
     div.style('margin-left', marginValue + 'px');
-    div.id(key);
-    // div.addClass('collapse');
+
+    var idFordivAndBtn = (fullKey + '.' + key).split('.').join('');
+    div.id(idFordivAndBtn);
+    // div.id(key);
     divs.push(div);
 
     // add a view button that can toggle the sub section
-    var btn = createButton(key);
+    var btn = createButton(idFordivAndBtn);
+    // var btn = createButton(key);
     btn.addClass('view-btn');
     btn.mouseClicked(toggleDivs);
     btn.parent(div);
