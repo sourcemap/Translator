@@ -29,6 +29,7 @@ function gotFile(file) {
   if (file.subtype === 'json') {
     jsonData = loadJSON(file.data, gotJSONData);
     document.getElementById('dropAndButton').style.visibility = 'visible';
+    document.getElementById('download-btn').style.visibility = 'visible';
   }
   else createP("File is not JSON, please upload a json file.");
 }
@@ -69,14 +70,20 @@ function traverseJSON(o, firstTier, parentId, func) {
 // called with every property and its value
 function process(key, value, last, parentId) {
   // if it's the end of a node, create a div with a span and input
+    var level =  (fullKey.split('.').length);
+    console.log(level,fullKey)
+    
+    
   if (typeof(value) !== "object") {
     var div = createDiv('');
     div.addClass('translate-div');
-    var marginValue = (fullKey.split('.').length - 1) * 50;
+    div.addClass('row');
+    var marginValue = 0;
     div.style('margin-left', marginValue + 'px');
     divsWithSpans.push(div);
 
     var span = createSpan(key);
+    
     spans.push(span);
     span.parent(div);
 
@@ -85,9 +92,10 @@ function process(key, value, last, parentId) {
     if (last) deleteLastKey();
 
   } else { // if it's not the end of a node, create a div, and a expand button
-    var div = createDiv(key);
+    var div = createDiv('');
     div.addClass('translate-div');
-    var marginValue = (fullKey.split('.').length - 1) * 50;
+    div.addClass('row');
+    var marginValue = 0;
     div.style('margin-left', marginValue + 'px');
 
     var idFordivAndBtn = (fullKey + '.' + key).split('.').join('');
@@ -96,7 +104,7 @@ function process(key, value, last, parentId) {
     divs.push(div);
 
     // add a view button that can toggle the sub section
-    var btn = createButton(idFordivAndBtn);
+    var btn = createElement('h'+level, idFordivAndBtn);
     // var btn = createButton(key);
     btn.addClass('view-btn');
     btn.mouseClicked(toggleDivs);

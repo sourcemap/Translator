@@ -9,6 +9,7 @@
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+
   <link rel="stylesheet" type="text/css" href="style.css">
 
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
@@ -21,26 +22,39 @@
 </head>
 
 <body>
-  <p id="dropzone">
-    Drag your JSON file here.
-  </p>
-
-  <div id="dropAndButton">
-    <div class="dropdown" id="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select Language
-      </button>
-      <div id="langMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      </div>
+    <div class="container">
+        <div class="header clearfix">
+                <h3 class="text-muted" id="dropzone">Drag your JSON file here.</h3>
+                
+        </div>
+        <div class="row"  id="dropAndButton">
+              <div class="dropdown form-group" id="dropdown" class="col-lg-6">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Select Language
+                </button>
+                <div id="langMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                </div>
+              </div>
+              
+              <div class="col-lg-6">
+                  <button id="download-btn" onclick="downloadJSON()">Download</button>
+              </div>
+        </div>
+        
+        
     </div>
+    
+    <div class="row" id="gencontent">
+        
+    </div>
+  
 
-    <button id="download-btn" onclick="downloadJSON()">Download</button>
-  </div>
+  
 
   <a id="downloadAnchorElem" style="display:none"></a>
 
 
-<div class="content watermark" style="width: 160px;position: absolute;left: 10px;bottom: 10px;"><a href="http://www.sourcemap.com/" target="_blank"><?xml version="1.0" encoding="utf-8"?>
+<div class="content watermark" style="width: 160px;position: fixed;left: 10px;bottom: 10px;"><a href="http://www.sourcemap.com/" target="_blank"><?xml version="1.0" encoding="utf-8"?>
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="sourcemap-watermark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
