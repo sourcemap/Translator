@@ -176,10 +176,29 @@
               <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
             </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+				<a href="#myModal" class="nav-link" data-toggle="modal">About</a>
             </li>
           </ul>
         </nav>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">About</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This is the JSON editor that allows you to upload a JSON file, edit it and download the updated file. This editor is developed by <a href="http://www.sourcemap.com/" target="_blank">Sourcemap</a>.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
         <h3 class="project-title"><a href="#">JSON Editor</a></h3>
       </div>
