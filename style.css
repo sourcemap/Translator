@@ -8,8 +8,8 @@ html, body {
 #dropzone {
     padding: 24px;
     border: 1px solid #333;
-/*    border-style: dashed;*/
-    font-size: 36pt;
+    border-style: dashed;
+    /*font-size: 36pt;*/
     transition: all .2s ease-in-out;
 }
 
@@ -42,7 +42,7 @@ html, body {
 }
 
 .view-btn:hover {
-	background: #e6e6e6;
+	background: #00FFC7;
 }
 
 #dropdownMenuButton {
@@ -50,8 +50,12 @@ html, body {
     border-color: #333;
 }
 
+#dropdownMenuButton:hover {
+    background: #00FFC7;
+}
+
 #download-btn:hover {
-	background: #e6e6e6;
+	background: #00FFC7;
 }
 
 .translate-div {
@@ -112,6 +116,8 @@ body {
 .jumbotron {
   text-align: center;
   border-bottom: .05rem solid #e5e5e5;
+  background-color: #D4F1FA;
+  border-radius: 0;
 }
 
 /*.jumbotron .btn {
@@ -127,8 +133,12 @@ body {
   margin-top: 1.5rem;
 }
 
-a:focus, a:hover {
-    color: #014c8c;
+a {
+    color: black;
+}
+
+a:hover {
+    color: #00FFC7;
     text-decoration: none;
 }
 

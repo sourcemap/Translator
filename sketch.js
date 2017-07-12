@@ -9,8 +9,36 @@ var divs = []; // divs holds all the parent keys
 var spans = []; // spans holds all the last children keys
 var divsWithSpans = [];
 
-var languages;
 var dataContainer;
+
+var languages = [
+      {"code":"ar","name":"Arabic","nativeName":"العربية"},
+      {"code":"cn","name":"Chinese","nativeName":"中文 (Zhōngwén), 汉语, 漢語"},
+      {"code":"nl","name":"Dutch","nativeName":"Nederlands, Vlaams"},
+      {"code":"en","name":"English","nativeName":"English"},
+      {"code":"fr","name":"French","nativeName":"français, langue française"},
+      {"code":"de","name":"German","nativeName":"Deutsch"},
+      {"code":"el","name":"Greek, Modern","nativeName":"Ελληνικά"},
+      {"code":"he","name":"Hebrew (modern)","nativeName":"עברית"},
+      {"code":"id","name":"Indonesian","nativeName":"Bahasa Indonesia"},
+      {"code":"it","name":"Italian","nativeName":"Italiano"},
+      {"code":"ja","name":"Japanese","nativeName":"日本語 (にほんご／にっぽんご)"},
+      {"code":"ko","name":"Korean","nativeName":"한국어 (韓國語), 조선말 (朝鮮語)"},
+      {"code":"kj","name":"Kwanyama, Kuanyama","nativeName":"Kuanyama"},
+      {"code":"la","name":"Latin","nativeName":"latine, lingua latina"},
+      {"code":"lv","name":"Latvian","nativeName":"latviešu valoda"},
+      {"code":"mn","name":"Mongolian","nativeName":"монгол"},
+      {"code":"no","name":"Norwegian","nativeName":"Norsk"},
+      {"code":"pl","name":"Polish","nativeName":"polski"},
+      {"code":"pt","name":"Portuguese","nativeName":"Português"},
+      {"code":"ro","name":"Romanian, Moldavian, Moldovan","nativeName":"română"},
+      {"code":"ru","name":"Russian","nativeName":"русский язык"},
+      {"code":"es","name":"Spanish; Castilian","nativeName":"español, castellano"},
+      {"code":"sv","name":"Swedish","nativeName":"svenska"},
+      {"code":"th","name":"Thai","nativeName":"ไทย"},
+      {"code":"tr","name":"Turkish","nativeName":"Türkçe"},
+      {"code":"vi","name":"Vietnamese","nativeName":"Tiếng Việt"}
+];
 
 function setup() {
   noCanvas();
@@ -20,7 +48,7 @@ function setup() {
   dropzone.dragLeave(unhighlight);
   dropzone.drop(gotFile, unhighlight);
 
-  languages = loadJSON('short-langs.json', createDropdownItems);
+  createDropdownItems();
 }
 
 function gotFile(file) {
@@ -212,9 +240,9 @@ function callbackForDropdown() {
 }
 
 function highlight() {
-  dropzone.style('background-color','#e6e6e6');
+  dropzone.style('background-color','#00FFC7');
 }
 
 function unhighlight() {
-  dropzone.style('background-color','#fff');
+  dropzone.style('background-color','#D4F1FA');
 }
