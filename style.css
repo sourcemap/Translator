@@ -146,8 +146,8 @@ a {
 }
 
 a:hover {
-    background-color: #00FFC7;
-    color: black;
+    /*background-color: #00FFC7;*/
+    color: darkBlue;
     /*border-bottom: 0.2rem solid #00FFC7;*/
     text-decoration: none;
 }

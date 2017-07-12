@@ -131,7 +131,7 @@ function process(key, value, firstTier, last, backSteps, parentId) {
     divs.push(div);
 
     // add a view button that can toggle the sub section
-    var btn = createButton('VIEW');
+    var btn = createButton('CLOSE');
     // var btn = createButton(key);
     btn.addClass('view-btn');
     btn.id(idFordivAndBtn);
@@ -153,6 +153,8 @@ function process(key, value, firstTier, last, backSteps, parentId) {
 }
 
 function toggleDivs() {
+  if (this.html() === 'VIEW') this.html('CLOSE');
+  else if (this.html() === 'CLOSE') this.html('VIEW');
   let key = this.id();
   let selectString = '#' + key + ' .translate-div';
   $(selectString).toggle();
@@ -246,13 +248,15 @@ function callbackForDropdown() {
 }
 
 function toggleViews() {
-    if (this.event.target.innerText === 'Close All Sections') {
-        this.event.target.innerText = 'View All Sections';
-        $('.view-div').hide();
-    } else if (this.event.target.innerText === 'View All Sections') {
-        this.event.target.innerText = 'Close All Sections';
-        $('.view-div').show();
-    }
+  if (this.event.target.innerText === 'Close All Sections') {
+    this.event.target.innerText = 'View All Sections';
+    $('.view-div').hide();
+    $('.view-btn').html('VIEW');
+  } else if (this.event.target.innerText === 'View All Sections') {
+    this.event.target.innerText = 'Close All Sections';
+    $('.view-div').show();
+    $('.view-btn').html('CLOSE');
+  }
 }
 
 function highlight() {
