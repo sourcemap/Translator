@@ -61,6 +61,7 @@ function gotFile(file) {
   if (file.subtype === 'json') {
     jsonData = loadJSON(file.data, gotJSONData);
     document.getElementById('dropAndButton').style.visibility = 'visible';
+    document.getElementById('viewall-btn').style.visibility = 'visible';
   }
   else {
     var resultP = createP("File is not JSON, please upload a json file.");
@@ -84,7 +85,7 @@ function traverseJSON(o, firstTier, backSteps, parentId, func) {
         backSteps++; // if this is the last item on this level, backsteps++
     }
 
-    func.apply(this, [i, o[i], last, backSteps, parentId]);
+    func.apply(this, [i, o[i], firstTier, last, backSteps, parentId]);
 
     if (o[i] !== null) {
       if (typeof(o[i]) == "object") {
@@ -99,7 +100,7 @@ function traverseJSON(o, firstTier, backSteps, parentId, func) {
 }
 
 // called with every property and its value
-function process(key, value, last, backSteps, parentId) {
+function process(key, value, firstTier, last, backSteps, parentId) {
   // if it's the end of a node, create a div with a span and input
   if (typeof(value) !== "object") {
     var div = createDiv('');
@@ -130,9 +131,10 @@ function process(key, value, last, backSteps, parentId) {
     divs.push(div);
 
     // add a view button that can toggle the sub section
-    var btn = createButton(idFordivAndBtn);
+    var btn = createButton('VIEW');
     // var btn = createButton(key);
     btn.addClass('view-btn');
+    btn.id(idFordivAndBtn);
     btn.mouseClicked(toggleDivs);
     btn.parent(div);
 
@@ -144,10 +146,14 @@ function process(key, value, last, backSteps, parentId) {
   } else {
     div.parent(dataContainer);
   }
+
+  if (!firstTier) {
+    div.addClass('view-div');
+  }
 }
 
 function toggleDivs() {
-  let key = this.html();
+  let key = this.id();
   let selectString = '#' + key + ' .translate-div';
   $(selectString).toggle();
 }
@@ -237,6 +243,16 @@ function callbackForDropdown() {
     $("#dropdownMenuButton").text(selText);
     selectedLang = $(this)[0].id;
   });
+}
+
+function toggleViews() {
+    if (this.event.target.innerText === 'Close All Sections') {
+        this.event.target.innerText = 'View All Sections';
+        $('.view-div').hide();
+    } else if (this.event.target.innerText === 'View All Sections') {
+        this.event.target.innerText = 'Close All Sections';
+        $('.view-div').show();
+    }
 }
 
 function highlight() {
