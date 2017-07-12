@@ -34,40 +34,37 @@ function gotFile(file) {
 }
 
 function gotJSONData(data) {
-  traverseJSON(data, true, null, process);
+  traverseJSON(data, 0, null, process);
 }
 
-function traverseJSON(o, firstTier, parentId, func) {
+function traverseJSON(o, backSteps, parentId, func) {
   var oLength = Object.keys(o).length;
   var index = 0;
 
   for (var i in o) {
-    var last;
+    var last = false;
 
-    if (index === oLength - 1) last = true;
-    else last = false;
+    if (index === oLength - 1) {
+        last = true;
+        backSteps++; // if this is the last item on this level, backsteps++
+    }
 
-    func.apply(this, [i, o[i], last, parentId]);
+    func.apply(this, [i, o[i], last, backSteps, parentId]);
 
     if (o[i] !== null) {
       if (typeof(o[i]) == "object") {
-        // if (last && !firstTier) deleteLastKey();
-        // going one step down in the object tree
-        // not the firstTier, and pass in the parent's id
+        // going one step down in the object tree and pass in the parent's id
         let idFromFullKey = fullKey.split('.').join('');
-        traverseJSON(o[i], false, idFromFullKey, func);
+        traverseJSON(o[i], backSteps, idFromFullKey, func);
       }
     }
 
     index++;
-
-    // if it's the first-tier keys of the jsonData, afte down with it, delete the key
-    if (firstTier) deleteLastKey();
   }
 }
 
 // called with every property and its value
-function process(key, value, last, parentId) {
+function process(key, value, last, backSteps, parentId) {
   // if it's the end of a node, create a div with a span and input
   if (typeof(value) !== "object") {
     var div = createDiv('');
@@ -82,7 +79,7 @@ function process(key, value, last, parentId) {
 
     createTextInput(fullKey + '.' + key, value, div);
 
-    if (last) deleteLastKey();
+    if (last) deleteLastKey(backSteps);
 
   } else { // if it's not the end of a node, create a div, and a expand button
     var div = createDiv(key);
@@ -116,9 +113,12 @@ function toggleDivs() {
   $(selectString).toggle();
 }
 
-function deleteLastKey() {
-  let lastDotIndex = fullKey.lastIndexOf('.');
-  fullKey = fullKey.slice(0, lastDotIndex);
+function deleteLastKey(num) {
+  let keys = fullKey.split('.');
+  for (let j = 0; j < num; j++) {
+    keys.pop();
+  }
+  fullKey = keys.join('.');
 }
 
 function createTextInput(key, value, div) {
