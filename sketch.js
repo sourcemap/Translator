@@ -10,6 +10,7 @@ var spans = []; // spans holds all the last children keys
 var divsWithSpans = [];
 
 var languages;
+var dataContainer;
 
 function setup() {
   noCanvas();
@@ -23,14 +24,20 @@ function setup() {
 }
 
 function gotFile(file) {
-  createP("File: " + file.name + " is uploaded successfully. File Size: " + file.size + '.');
+  dataContainer = select('#data-container');
+
+  var resultP = createP("File: " + file.name + " is uploaded successfully. File Size: " + file.size + '.');
+  resultP.parent(dataContainer);
   removeExistingContent();
 
   if (file.subtype === 'json') {
     jsonData = loadJSON(file.data, gotJSONData);
     document.getElementById('dropAndButton').style.visibility = 'visible';
   }
-  else createP("File is not JSON, please upload a json file.");
+  else {
+    var resultP = createP("File is not JSON, please upload a json file.");
+    resultP.parent(dataContainer);
+  }
 }
 
 function gotJSONData(data) {
@@ -106,6 +113,8 @@ function process(key, value, last, backSteps, parentId) {
 
   if (parentId) {
     div.parent(select('#' + parentId));
+  } else {
+    div.parent(dataContainer);
   }
 }
 
