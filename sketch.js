@@ -34,17 +34,17 @@ function gotFile(file) {
 }
 
 function gotJSONData(data) {
-  traverseJSON(data, 0, null, process);
+  traverseJSON(data, true, 0, null, process);
 }
 
-function traverseJSON(o, backSteps, parentId, func) {
+function traverseJSON(o, firstTier, backSteps, parentId, func) {
   var oLength = Object.keys(o).length;
   var index = 0;
 
   for (var i in o) {
     var last = false;
 
-    if (index === oLength - 1) {
+    if (index === oLength - 1 && !firstTier) {
         last = true;
         backSteps++; // if this is the last item on this level, backsteps++
     }
@@ -55,7 +55,7 @@ function traverseJSON(o, backSteps, parentId, func) {
       if (typeof(o[i]) == "object") {
         // going one step down in the object tree and pass in the parent's id
         let idFromFullKey = fullKey.split('.').join('');
-        traverseJSON(o[i], backSteps, idFromFullKey, func);
+        traverseJSON(o[i], false, backSteps, idFromFullKey, func);
       }
     }
 
@@ -79,7 +79,9 @@ function process(key, value, last, backSteps, parentId) {
 
     createTextInput(fullKey + '.' + key, value, div);
 
-    if (last) deleteLastKey(backSteps);
+    if (last) {
+        deleteLastKey(backSteps);
+    }
 
   } else { // if it's not the end of a node, create a div, and a expand button
     var div = createDiv(key);
